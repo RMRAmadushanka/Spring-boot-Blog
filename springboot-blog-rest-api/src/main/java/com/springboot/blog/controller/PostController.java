@@ -26,8 +26,11 @@ public class PostController {
 
     //get all post rest api
     @GetMapping
-    public List<PostDto> getAllPosts(){
-        return postService.getAllPosts();
+    public List<PostDto> getAllPosts(
+            @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize
+    ){
+        return postService.getAllPosts(pageNo,pageSize);
     }
 
     @GetMapping("/{id}")
@@ -40,5 +43,11 @@ public class PostController {
         PostDto postResponse = postService.updatePost(postDto,id);
         return new ResponseEntity<>(postResponse,HttpStatus.OK);
 
+    }
+
+@DeleteMapping("/{id}")
+    public ResponseEntity<String> deletePost(@PathVariable long id){
+        postService.deletePostById(id);
+        return new ResponseEntity<>("Post entity deleted successfully",HttpStatus.OK);
     }
 }
